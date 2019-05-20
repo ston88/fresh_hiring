@@ -17,7 +17,6 @@ config :fresh_hiring, FreshHiringWeb.Endpoint,
       "--mode",
       "development",
       "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
     ]
   ]
 
@@ -68,8 +67,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :fresh_hiring, FreshHiring.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: System.get_env("DATA_DB_USER") || "postgres",
+  password: System.get_env("DATA_DB_PASS") || "postgres",
   database: "fresh_hiring_dev",
   hostname: "localhost",
   pool_size: 10

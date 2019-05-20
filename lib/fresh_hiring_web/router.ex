@@ -16,7 +16,7 @@ defmodule FreshHiringWeb.Router do
   scope "/", FreshHiringWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/*path", PageController, :index
   end
 
   # Other scopes may use custom stacks.
