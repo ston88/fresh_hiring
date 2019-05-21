@@ -1,5 +1,6 @@
 defmodule FreshHiringWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :fresh_hiring
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", FreshHiringWeb.UserSocket,
     websocket: true,

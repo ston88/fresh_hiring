@@ -11,6 +11,30 @@ defmodule FreshHiringWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_cookies
+    plug :fetch_session
+    plug :fetch_flash
+    plug :put_secure_browser_headers
+    plug(FreshHiringWeb.Authentication)
+  end
+
+  scope "/api/auth", FreshHiringWeb do
+    pipe_through(:api)
+
+    get "/signin/:token", SessionController, :show
+    post "/logout", SessionController, :logout
+  end
+
+  scope "/api/sent_emails" do
+    pipe_through(:api)
+
+    forward "/api/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
+  scope "/api" do
+    pipe_through(:api)
+
+    forward("/graphql", Absinthe.Plug, schema: FreshHiringWeb.Schema)
   end
 
   scope "/", FreshHiringWeb do
@@ -18,9 +42,4 @@ defmodule FreshHiringWeb.Router do
 
     get "/*path", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", FreshHiringWeb do
-  #   pipe_through :api
-  # end
 end

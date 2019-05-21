@@ -60,6 +60,13 @@ defmodule FreshHiringWeb do
     end
   end
 
+  def type do
+    quote do
+      use Absinthe.Schema.Notation
+      use Absinthe.Relay.Schema.Notation, :classic
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
