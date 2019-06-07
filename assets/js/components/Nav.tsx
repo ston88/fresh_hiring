@@ -3,6 +3,8 @@ import * as React from 'react';
 import { AppBar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
+// Contexts
+import AuthDialogContext from '../contexts/AuthDialogContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -21,6 +23,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 function Nav() {
   const classes = useStyles();
 
+  const { showAuthDialog } = React.useContext(AuthDialogContext);
+
   return (
     <AppBar className={classes.appBar}>
       <Toolbar>
@@ -31,12 +35,20 @@ function Nav() {
           <Grid item className={classes.menuContainer}>
             <Grid container justify="flex-end" spacing={2}>
               <Grid item>
-                <Button color="primary" variant="contained">
+                <Button
+                  color="primary"
+                  onClick={showAuthDialog}
+                  variant="contained"
+                >
                   Sign In
                 </Button>
               </Grid>
               <Grid item>
-                <Button color="secondary" variant="contained">
+                <Button
+                  color="secondary"
+                  onClick={showAuthDialog}
+                  variant="contained"
+                >
                   Create a Free Account
                 </Button>
               </Grid>

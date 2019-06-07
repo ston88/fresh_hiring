@@ -15,15 +15,6 @@ import { makeStyles } from '@material-ui/styles';
 import SnackbarContext from '../contexts/SnackbarContext';
 
 interface ICustomSnackbarContentProps {
-  classes: {
-    success: string;
-    error: string;
-    info: string;
-    warning: string;
-    icon: string;
-    iconVariant: string;
-    message: string;
-  };
   message: string;
   onClose: () => void;
   variant: 'success' | 'error';
@@ -56,7 +47,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 function CustomSnackbarContent(props: ICustomSnackbarContentProps) {
-  const { classes, message, onClose, variant, ...other } = props;
+  const classes = useStyles();
+
+  const { message, onClose, variant, ...other } = props;
 
   return (
     <SnackbarContent
@@ -93,8 +86,6 @@ function CustomSnackbarContent(props: ICustomSnackbarContentProps) {
 }
 
 function CustomSnackbar() {
-  const classes = useStyles();
-
   const { hideSnackbar, message, variant, visible } = React.useContext(
     SnackbarContext,
   );
@@ -110,7 +101,6 @@ function CustomSnackbar() {
       onClose={hideSnackbar}
     >
       <CustomSnackbarContent
-        classes={classes}
         onClose={hideSnackbar}
         variant={variant}
         message={message}

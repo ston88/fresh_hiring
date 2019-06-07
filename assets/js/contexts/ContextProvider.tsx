@@ -55,7 +55,7 @@ function ContextProvider({ children }: { children: React.ReactNode }) {
   function showAuthDialog() {
     setAuthDialog((prevAuthDialog) => ({
       ...prevAuthDialog,
-      visible: false,
+      visible: true,
     }));
   }
 

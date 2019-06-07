@@ -8,6 +8,7 @@
     "ordered-imports": false,
     "quotemark": [true, "single", "jsx-double"],
     "jsx-boolean-value": false,
+    "jsx-no-lambda": false,
     "jsx-no-multiline-js": false
   }
 }
