@@ -1,7 +1,7 @@
 <p>
   Here is your login link:
 
-  <%= link "Sign In", to: sign_in_url(:verify, @token) %>
+  <%= link "Sign In", to: sign_in_url(FreshHiringWeb.Endpoint, :verify, @token) %>
 
   It is valid for 30 minutes.
 </p>
