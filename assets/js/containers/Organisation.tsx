@@ -3,10 +3,10 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 // MUI Core
 import { Box, Container, Grid, Hidden } from '@material-ui/core';
 // Components
-import OrganisationHeader from '../components/OrganisationHeader';
-import OrganisationInformation from '../components/OrganisationInformation';
-import OrganisationLiveCapitalRaise from '../components/OrganisationLiveCapitalRaise';
-import OrganisationStickyBidCard from '../components/OrganisationStickyBidCard';
+import OrganisationHeader from '../components/organisation/OrganisationHeader';
+import OrganisationInformation from '../components/organisation/OrganisationInformation';
+import OrganisationLiveCapitalRaise from '../components/organisation/OrganisationLiveCapitalRaise';
+import OrganisationStickyBidCard from '../components/organisation/OrganisationStickyBidCard';
 
 function Organisation({
   match,

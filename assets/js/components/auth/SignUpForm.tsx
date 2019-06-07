@@ -6,15 +6,15 @@ import * as yup from 'yup';
 // MUI Core
 import { Button, Grid, TextField } from '@material-ui/core';
 // Contexts
-import AuthDialogContext from '../contexts/AuthDialogContext';
-import SnackbarContext from '../contexts/SnackbarContext';
+import AuthDialogContext from '../../contexts/AuthDialogContext';
+import SnackbarContext from '../../contexts/SnackbarContext';
 // GraphQL
 import CreateUserMutation, {
   ICreateUserMutationData,
   ICreateUserMutationVariables,
-} from '../graphql/mutations/CreateUserMutation.graphql';
+} from '../../graphql/mutations/CreateUserMutation.graphql';
 // Utils
-import { getErrorMessage } from '../utils/helper';
+import { getErrorMessage } from '../../utils/helper';
 
 interface IProps {
   handleCancel: () => void;

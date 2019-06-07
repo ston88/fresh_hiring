@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/styles';
 import LogInForm from './LogInForm';
 import SignUpForm from './SignUpForm';
 // Contexts
-import AuthDialogContext from '../contexts/AuthDialogContext';
+import AuthDialogContext from '../../contexts/AuthDialogContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dialogContentRoot: {

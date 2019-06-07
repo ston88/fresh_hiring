@@ -12,7 +12,7 @@ import {
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
 // Context
-import SnackbarContext from '../contexts/SnackbarContext';
+import SnackbarContext from '../../contexts/SnackbarContext';
 
 interface ICustomSnackbarContentProps {
   message: string;
