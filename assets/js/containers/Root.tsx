@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Components
 import AuthDialog from '../components/AuthDialog';
+import CustomSnackbar from '../components/CustomSnackbar';
 import Nav from '../components/Nav';
 // Containers
 import Home from './Home';
@@ -9,29 +11,34 @@ import Organisation from './Organisation';
 import Welcome from './Welcome';
 // Contexts
 import ContextProvider from '../contexts/ContextProvider';
+// Utils
+import client from '../utils/client';
 
 function Root() {
   return (
-    <BrowserRouter>
-      <ContextProvider>
-        <AuthDialog />
-        <Nav />
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <ContextProvider>
+          <AuthDialog />
+          <CustomSnackbar />
+          <Nav />
 
-        <Switch>
-          {/* Route for home page. */}
-          <Route exact path="/" component={Home} />
+          <Switch>
+            {/* Route for home page. */}
+            <Route exact path="/" component={Home} />
 
-          {/* Route for welcome page. */}
-          <Route exact path="/welcome/:token" component={Welcome} />
+            {/* Route for welcome page. */}
+            <Route exact path="/welcome/:token" component={Welcome} />
 
-          {/* Route for organisation page. */}
-          <Route exact path="/:marketKey/:listingKey" component={Organisation} />
+            {/* Route for organisation page. */}
+            <Route exact path="/:marketKey/:listingKey" component={Organisation} />
 
-          {/* Route for 404. */}
-          <Route />
-        </Switch>
-      </ContextProvider>
-    </BrowserRouter>
+            {/* Route for 404. */}
+            <Route />
+          </Switch>
+        </ContextProvider>
+      </BrowserRouter>
+    </ApolloProvider>
   );
 }
 
