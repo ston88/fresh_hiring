@@ -2,7 +2,7 @@ defmodule FreshHiring.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias FreshHiring.Accounts.AuthToken
+  alias FreshHiring.Accounts.Session
 
   @user_fields [:email, :invalidated, :name]
 
@@ -13,7 +13,7 @@ defmodule FreshHiring.Accounts.User do
     field :invalidated, :boolean, default: false
     field :name, :string
 
-    has_many :auth_tokens, :AuthToken
+    has_many :sessions, Session
 
     timestamps()
   end

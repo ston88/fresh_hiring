@@ -132,7 +132,7 @@ defmodule FreshHiring.Accounts do
     User.changeset(user, %{})
   end
 
-  alias FreshHiring.Accounts.AuthToken
+  alias FreshHiring.Accounts.Session
 
   @doc """
   Returns the list of accounts_sessions.
