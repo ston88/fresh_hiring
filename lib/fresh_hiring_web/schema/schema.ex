@@ -8,7 +8,7 @@ defmodule FreshHiringWeb.Schema do
   import_types Absinthe.Plug.Types
 
   query do
-    connection field :capital_raise_list, node_type: :capital_raise do
+    connection field :capital_raises_list, node_type: :capital_raise do
       arg(:options, :options_input)
       resolve(&Resolvers.Organisations.capital_raises_cursor/3)
     end
