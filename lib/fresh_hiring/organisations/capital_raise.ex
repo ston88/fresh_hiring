@@ -36,6 +36,7 @@ defmodule FreshHiring.Organisations.CapitalRaise do
   ]
 
   schema "organisations_capital_raises" do
+    field :allocation_available, :boolean
     field :banner, :string
     field :bids_due, :naive_datetime
     field :bidding_open, :naive_datetime
