@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { Form, Formik, FormikBag, FormikActions, FormikProps } from 'formik';
-import * as yup from 'yup';
 // MUI Core
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
   Grid,
-  TextField,
   Theme,
 } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
+// Components
+import LogInForm from './LogInForm';
+import SignUpForm from './SignUpForm';
 // Contexts
 import AuthDialogContext from '../contexts/AuthDialogContext';
 
@@ -30,65 +29,23 @@ function AuthDialog() {
 
   const { hideAuthDialog, visible } = React.useContext(AuthDialogContext);
 
-  function handleSubmit() {}
+  const [mode, setMode] = React.useState<'sign-in' | 'sign-up'>('sign-in');
 
   return (
     <Dialog keepMounted maxWidth="xs" onClose={hideAuthDialog} open={visible}>
       <DialogContent classes={{ root: classes.dialogContentRoot }}>
-        <Formik
-          initialValues={{
-            email: '',
-          }}
-          onSubmit={handleSubmit}
-          render={({
-            errors,
-            isSubmitting,
-            setFieldValue,
-            touched,
-            values,
-          }) => (
-            <Form>
-              <Grid container justify="center" spacing={3}>
-                <Grid item className={classes.logoContainer}>
-                  <Box my={3}>
-                    <img
-                      alt="Fresh Equities"
-                      height="32"
-                      src="/images/logo.svg"
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={Boolean(errors.email && touched.email)}
-                    fullWidth
-                    label="Email"
-                    onChange={(e) => setFieldValue('email', e.target.value)}
-                    value={values.email}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    color="secondary"
-                    disabled={isSubmitting}
-                    fullWidth
-                    type="submit"
-                    variant="contained"
-                  >
-                    Continue with Email
-                  </Button>
-                </Grid>
-              </Grid>
-            </Form>
-          )}
-          validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email()
-              .required(),
-          })}
-        />
+        <Grid container justify="center" spacing={3}>
+          <Grid item className={classes.logoContainer}>
+            <Box my={3}>
+              <img alt="Fresh Equities" height="32" src="/images/logo.svg" />
+            </Box>
+          </Grid>
+
+          <Grid item xs={12}>
+            {mode === 'sign-in' && <LogInForm handleSignUp={() => setMode('sign-up')} />}
+            {mode === 'sign-up' && <SignUpForm handleCancel={() => setMode('sign-in')} />}
+          </Grid>
+        </Grid>
       </DialogContent>
     </Dialog>
   );

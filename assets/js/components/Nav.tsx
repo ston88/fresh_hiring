@@ -36,20 +36,11 @@ function Nav() {
             <Grid container justify="flex-end" spacing={2}>
               <Grid item>
                 <Button
-                  color="primary"
-                  onClick={showAuthDialog}
-                  variant="contained"
-                >
-                  Sign In
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
                   color="secondary"
                   onClick={showAuthDialog}
                   variant="contained"
                 >
-                  Create a Free Account
+                  Sign In
                 </Button>
               </Grid>
             </Grid>
