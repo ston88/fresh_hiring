@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <body>
     <%= render @view_module, @view_template, assigns %>
   </body>
