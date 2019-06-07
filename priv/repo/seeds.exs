@@ -81,7 +81,7 @@ Enum.each(capital_raises, fn cr ->
     nil ->
       %FreshHiring.Organisations.CapitalRaise{}
       |> FreshHiring.Organisations.CapitalRaise.changeset(cr)
-      |> Fresh.Repo.insert()
+      |> FreshHiring.Repo.insert()
 
     existing_raise ->
       existing_raise
