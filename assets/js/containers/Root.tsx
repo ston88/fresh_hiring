@@ -2,9 +2,9 @@ import * as React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Components
-import AuthDialog from '../components/AuthDialog';
-import CustomSnackbar from '../components/CustomSnackbar';
-import Nav from '../components/Nav';
+import AuthDialog from '../components/auth/AuthDialog';
+import CustomSnackbar from '../components/common/CustomSnackbar';
+import Nav from '../components/common/Nav';
 // Containers
 import Home from './Home';
 import Organisation from './Organisation';

@@ -7,8 +7,8 @@ import { Button, Grid, TextField, Typography } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
 // Contexts
-import AuthDialogContext from '../contexts/AuthDialogContext';
-import SnackbarContext from '../contexts/SnackbarContext';
+import AuthDialogContext from '../../contexts/AuthDialogContext';
+import SnackbarContext from '../../contexts/SnackbarContext';
 
 interface IProps {
   handleSignUp: () => void;

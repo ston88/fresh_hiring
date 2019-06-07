@@ -5,7 +5,7 @@ import { AppBar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
 // Contexts
-import AuthDialogContext from '../contexts/AuthDialogContext';
+import AuthDialogContext from '../../contexts/AuthDialogContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
