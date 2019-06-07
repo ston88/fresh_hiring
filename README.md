@@ -25,6 +25,8 @@ The Phoenix app can be found in Lib
 
 ## Tasks
 
+Fresh Equities lets investors discover and participate in capital raises.  We work by showing users a marketplace of deals and letting them bid into the book for capital raises.
+
 ### Implement Bidding for Capital Raises
 
 The requirements for bidding are as follows;
