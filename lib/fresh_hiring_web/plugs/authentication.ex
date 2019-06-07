@@ -31,6 +31,10 @@ defmodule FreshHiringWeb.Authentication do
   end
 
   def logout(conn) do
+    %{token: conn.cookies["fresh_hiring_remember_session"]}
+    |> Accounts.get_session_by()
+    |> Accounts.update_session(%{invalidated: true})
+
     conn
     |> configure_session(drop: true)
     |> delete_resp_cookie("fresh_hiring_remember_session")
