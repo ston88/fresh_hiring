@@ -14,5 +14,5 @@
     "sourceMap": true,
     "strict": true
   },
-  "include": ["./**/*.ts", "./**/*.tsx"]
+  "include": ["assets/**/*.ts", "assets/**/*.tsx"]
 }
