@@ -4,7 +4,7 @@
   
   Click the link below to complete your sign up.
 
-  <%= link "Sign Up", to: sign_in_url(:verify, @token) %>
+  <%= link "Sign Up", to: "/api/auth/verify?token=#{@token}" %>
 
   It is valid for 30 minutes.
 </p>
