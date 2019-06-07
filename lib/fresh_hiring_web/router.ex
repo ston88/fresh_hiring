@@ -21,6 +21,7 @@ defmodule FreshHiringWeb.Router do
   scope "/api/auth", FreshHiringWeb do
     pipe_through(:api)
 
+    post "/login", SessionController, :login
     get "/signin/:token", SessionController, :show
     post "/logout", SessionController, :logout
   end
