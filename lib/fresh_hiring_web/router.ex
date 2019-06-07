@@ -22,7 +22,7 @@ defmodule FreshHiringWeb.Router do
     pipe_through(:api)
 
     post "/login", SessionController, :login
-    get "/signin/:token", SessionController, :show
+    get "/verify", SessionController, :verify
     post "/logout", SessionController, :logout
   end
 

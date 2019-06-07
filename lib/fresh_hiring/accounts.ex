@@ -180,28 +180,9 @@ defmodule FreshHiring.Accounts do
 
   """
   def create_auth_token(attrs \\ %{}) do
-    Multi.new()
-    |> Multi.insert(:auth_token, AuthToken.changeset(%AuthToken{}, attrs))
-    |> Multi.run(:user, fn _repo, %{auth_token: %{user_id: u_id}} ->
-      case get_user(u_id) do
-        nil ->
-          {:error, "user can't be found"}
-
-        user ->
-          {:ok, user}
-      end
-    end)
-    |> Repo.transaction
-    |> case do
-      {:ok, %{auth_token: at, user: user}} ->
-        # Send sign in to new user
-        Emails.sign_in_email(user.email, at.token) |> Mailer.deliver_now
-        # Return
-        {:ok, at}
-
-      {:error, ops, res, _} ->
-        {:error, "Error signing in: #{ops} - #{inspect res}"}
-    end
+    %AuthToken{}
+    |> AuthToken.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -220,34 +201,6 @@ defmodule FreshHiring.Accounts do
     auth_token
     |> AuthToken.changeset(attrs)
     |> Repo.update()
-  end
-
-  def verify_auth_token(token) do
-    case get_auth_token_by(%{invalidated: false, token: token}) do
-      nil ->
-        {:error, "token isn't valid"}
-
-      auth_token ->
-        Multi.new()
-        |> Multi.update(:auth_token, AuthToken.changeset(auth_token, %{invalidated: true, used_at: NaiveDateTime.utc_now}))
-        |> Multi.run(:user, fn _repo, %{auth_token: %{user_id: u_id}} ->
-          case get_user(u_id) do
-            nil ->
-              {:error, "user doesn't exist"}
-
-            user ->
-              {:ok, user}
-          end
-        end)
-        |> Repo.transaction()
-        |> case do
-          {:ok, %{auth_token: at, user: user}} ->
-            {:ok, %{auth_token: at, user: user}}
-
-          {:error, _ops, _res} ->
-            {:error, "something went wrong while verifying your login"}
-        end
-    end
   end
 
   @doc """

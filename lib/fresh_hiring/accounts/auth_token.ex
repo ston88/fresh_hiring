@@ -6,24 +6,25 @@ defmodule FreshHiring.Accounts.AuthToken do
   alias FreshHiring.{Endpoint}
 
   @auth_fields [
+    :authenticated,
+    :auth_token,
     :invalidated,
     :redirect_to,
     :token,
-    :used_at,
     :user_id,
   ]
 
   @req_fields [
     :redirect_to,
-    :token,
     :user_id,
   ]
 
   schema "accounts_auth_tokens" do
+    field(:authenticated, :boolean, default: false)
+    field(:auth_token, Ecto.UUID, autogenerate: true)
     field :invalidated, :boolean, default: false
     field :redirect_to, :string
-    field :token, :string
-    field :used_at, :naive_datetime
+    field(:token, Ecto.UUID, autogenerate: true)
 
     belongs_to(:user, User, foreign_key: :user_id)
 
@@ -35,15 +36,6 @@ defmodule FreshHiring.Accounts.AuthToken do
     auth_token
     |> cast(attrs, @auth_fields)
     |> validate_required(@req_fields)
-    |> generate_token()
-  end
-
-  defp generate_token(changeset) do
-    if changeset.valid? and is_nil(changeset.changes[:token]) do
-      changeset
-      |> put_change(:token, Phoenix.Token.sign(Endpoint, "user", changeset.changes[:user_id]))
-    else
-      changeset
-    end
+    |> unique_constraint(:token)
   end
 end
