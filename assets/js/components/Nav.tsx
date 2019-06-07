@@ -26,11 +26,11 @@ function Nav() {
   const { showAuthDialog } = React.useContext(AuthDialogContext);
 
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar className={classes.appBar} position="static">
       <Toolbar>
         <Grid container alignItems="center" spacing={3}>
           <Grid item className={classes.logoContainer}>
-            <img alt="Fresh Equities" height="24" src="images/logo.svg" />
+            <img alt="Fresh Equities" height="24" src="/images/logo.svg" />
           </Grid>
           <Grid item className={classes.menuContainer}>
             <Grid container justify="flex-end" spacing={2}>

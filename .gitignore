@@ -43,3 +43,5 @@ node_modules/
 
 # Removing elixir build information
 /.elixir_ls
+
+.DS_Store

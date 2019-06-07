@@ -54,7 +54,7 @@ function AuthDialog() {
                     <img
                       alt="Fresh Equities"
                       height="32"
-                      src="images/logo.svg"
+                      src="/images/logo.svg"
                     />
                   </Box>
                 </Grid>
