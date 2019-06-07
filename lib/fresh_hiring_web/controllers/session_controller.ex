@@ -3,6 +3,7 @@ defmodule FreshHiringWeb.SessionController do
 
   alias FreshHiring.Accounts
   alias FreshHiring.Emails
+  alias FreshHiring.Mailer
 
   alias FreshHiringWeb.Authentication
 
