@@ -8,6 +8,11 @@ defmodule FreshHiring.Organisations do
 
   alias FreshHiring.Organisations.CapitalRaise
 
+  ## General Functions ##
+  def run_query(query) do
+    Repo.all(query)
+  end
+
   @doc """
   Returns the list of organisations_capital_raises.
 
@@ -37,6 +42,10 @@ defmodule FreshHiring.Organisations do
   """
   def get_capital_raise!(id), do: Repo.get!(CapitalRaise, id)
 
+  def get_capital_raise(id), do: Repo.get(CapitalRaise, id)
+
+  def get_capital_raise_by(attrs), do: Repo.get_by(CapitalRaise, attrs)
+
   @doc """
   Creates a capital_raise.
 
@@ -53,6 +62,45 @@ defmodule FreshHiring.Organisations do
     %CapitalRaise{}
     |> CapitalRaise.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def capital_raises_query(args) do
+    Enum.reduce(args, CapitalRaise, fn
+      {:orders, orders}, query ->
+        query |> capital_raises_order_with(orders)
+
+      {:filters, filters}, query ->
+        query |> capital_raises_filter_with(filters)
+
+      _, query ->
+        query
+    end)
+  end
+
+  defp capital_raises_order_with(orders, query) do
+    Enum.reduce(orders, query, fn
+      %{key: "bidding_close", value: "true"}, query ->
+        from(q in query, order_by: [desc: :bidding_close])
+
+      %{key: "bids_due", value: "true"}, query ->
+        from(q in query, order_by: [desc: :bids_due])
+
+      %{key: "bidding_open", value: "true"}, query ->
+        from(q in query, order_by: [desc: :bidding_open])
+
+      %{key: "inserted_at", value: "true"}, query ->
+        from(q in query, order_by: [desc: :inserted_at])
+
+      %{key: "last_updated", value: "true"}, query ->
+        from(q in query, order_by: [desc: :updated_at])
+    end)
+  end
+
+  defp capital_raises_filter_with(filters, query) do
+    Enum.reduce(filters, query, fn
+      %{key: "key", value: value}, query ->
+        from(q in query, where: q.key == ^value)
+    end)
   end
 
   @doc """

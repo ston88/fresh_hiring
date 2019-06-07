@@ -49,7 +49,8 @@ defmodule FreshHiring.MixProject do
       {:absinthe_relay, "~> 1.4.3"},
       {:comeonin, "~> 4.1"},
       {:bcrypt_elixir, "~> 1.0"},
-      {:bamboo, "~> 1.2"}
+      {:bamboo, "~> 1.2"},
+      {:timex, "~> 3.1"}
     ]
   end
 

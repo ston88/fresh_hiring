@@ -24,8 +24,6 @@ defmodule FreshHiring.Accounts do
     Repo.all(User)
   end
 
-  def get_user(id), do: Repo.get(User, id)
-
   @doc """
   Gets a single user.
 
@@ -41,6 +39,8 @@ defmodule FreshHiring.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def get_user(id), do: Repo.get(User, id)
 
   def get_user_by(attrs), do: Repo.get_by(User, attrs)
 

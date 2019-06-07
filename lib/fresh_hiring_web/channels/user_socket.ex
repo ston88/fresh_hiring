@@ -4,7 +4,7 @@ defmodule FreshHiringWeb.UserSocket do
   use Absinthe.Phoenix.Socket,
     schema: FreshWeb.Schema
 
-  alias Fresh.Accounts
+  alias FreshHiring.Accounts
 
   ## Channels
   # channel "room:*", FreshHiringWeb.RoomChannel

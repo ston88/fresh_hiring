@@ -23,4 +23,14 @@ defmodule FreshHiringWeb.Resolvers.Accounts do
     end
   end
   def find_user(_, _, _), do: {:ok, nil}
+
+  def update_user(_parents, %{user_id: u_id, user: u_input}, %{context: %{current_user: user}}) do
+    if user.id == u_id do
+      Accounts.update_user(user, u_input)
+    else
+      {:error, "can't update the user"}
+    end
+  end
+
+  def update_user(_, _, _), do: {:ok, nil}
 end
