@@ -1,8 +1,7 @@
 defmodule FreshHiringWeb.EmailView do
   use FreshHiringWeb, :view
-  alias FreshHiringWeb.Router.Helpers, as: Routes
 
-  def sign_in_url(Endpoint, page, token) do
-    Routes.session_url(Endpoint, page, token)
+  def sign_in_url(endpoint, page, token) do
+    FreshHiringWeb.Router.Helpers.session_url(endpoint, page, token)
   end
 end
