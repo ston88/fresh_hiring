@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 // MUI Core
 import { AppBar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
 // MUI Styles
@@ -29,8 +30,10 @@ function Nav() {
     <AppBar className={classes.appBar} position="static">
       <Toolbar>
         <Grid container alignItems="center" spacing={3}>
-          <Grid item className={classes.logoContainer}>
-            <img alt="Fresh Equities" height="24" src="/images/logo.svg" />
+          <Grid item>
+            <Link className={classes.logoContainer} to="/">
+              <img alt="Fresh Equities" height="24" src="/images/logo.svg" />
+            </Link>
           </Grid>
           <Grid item className={classes.menuContainer}>
             <Grid container justify="flex-end" spacing={2}>

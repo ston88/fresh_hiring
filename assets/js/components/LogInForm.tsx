@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Form, Formik } from 'formik';
-import { Mutation } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as yup from 'yup';
 // MUI Core
@@ -10,13 +9,6 @@ import { makeStyles } from '@material-ui/styles';
 // Contexts
 import AuthDialogContext from '../contexts/AuthDialogContext';
 import SnackbarContext from '../contexts/SnackbarContext';
-// GraphQL
-import CreateAuthTokenMutation, {
-  ICreateAuthTokenMutationData,
-  ICreateAuthTokenMutationVariables,
-} from '../graphql/mutations/CreateAuthTokenMutation.graphql';
-// Utils
-import { getErrorMessage } from '../utils/helper';
 
 interface IProps {
   handleSignUp: () => void;
@@ -35,105 +27,107 @@ function LogInForm({ handleSignUp, history }: IProps & RouteComponentProps) {
   const { showSnackbar } = React.useContext(SnackbarContext);
 
   return (
-    <Mutation<ICreateAuthTokenMutationData, ICreateAuthTokenMutationVariables>
-      mutation={CreateAuthTokenMutation}
-    >
-      {(createAuthToken) => (
-        <Formik
-          initialValues={{
-            email: '',
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            const variables = {
-              email: values.email,
-              redirectTo: window.location.href,
-            };
+    <Formik
+      initialValues={{
+        email: '',
+      }}
+      onSubmit={(values, { resetForm, setSubmitting }) => {
+        const input = {
+          email: values.email,
+          redirect_to: window.location.href,
+        };
 
-            createAuthToken({ variables })
-              .then((result) => {
-                setSubmitting(false);
-                showSnackbar({
-                  message: `An email has been sent to ${values.email}`,
-                  variant: 'success',
-                });
-
-                hideAuthDialog();
-
-                if (result && result.data && result.data.createAuthToken) {
-                  history.push(`welcome/${result.data.createAuthToken}`);
-                }
-              })
-              .catch((error) => {
-                setSubmitting(false);
-                showSnackbar({
-                  message: getErrorMessage(error),
-                  variant: 'error',
-                });
+        fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(input),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              setSubmitting(false);
+              showSnackbar({
+                message: 'Oops! Someting went wrong.',
+                variant: 'error',
               });
-          }}
-          render={({
-            errors,
-            isSubmitting,
-            setFieldValue,
-            touched,
-            values,
-          }) => (
-            <Form>
-              <Grid container justify="center" spacing={3}>
-                <Grid item xs={12}>
-                  <TextField
-                    error={Boolean(errors.email && touched.email)}
-                    fullWidth
-                    label="Email"
-                    onChange={(e) =>
-                      setFieldValue('email', e.target.value.trim())
-                    }
-                    value={values.email}
-                    variant="outlined"
-                  />
+
+              return;
+            }
+
+            resetForm();
+
+            showSnackbar({
+              message: `An email has been sent to ${values.email}`,
+              variant: 'success',
+            });
+
+            hideAuthDialog();
+
+            history.push(`welcome/${data.session_token}`);
+          })
+          .catch(() => {
+            setSubmitting(false);
+            showSnackbar({
+              message: 'Oops! Someting went wrong.',
+              variant: 'error',
+            });
+          });
+      }}
+      render={({ errors, isSubmitting, setFieldValue, touched, values }) => (
+        <Form>
+          <Grid container justify="center" spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                error={Boolean(errors.email && touched.email)}
+                fullWidth
+                label="Email"
+                onChange={(e) => setFieldValue('email', e.target.value.trim())}
+                value={values.email}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                color="secondary"
+                disabled={isSubmitting}
+                fullWidth
+                type="submit"
+                variant="contained"
+              >
+                Continue with Email
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container justify="center" spacing={1}>
+                <Grid item>
+                  <Typography variant="body2">
+                    Do not have an account?
+                  </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button
+                <Grid item>
+                  <Typography
+                    className={classes.link}
                     color="secondary"
-                    disabled={isSubmitting}
-                    fullWidth
-                    type="submit"
-                    variant="contained"
+                    onClick={handleSignUp}
+                    variant="body2"
                   >
-                    Continue with Email
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container justify="center" spacing={1}>
-                    <Grid item>
-                      <Typography variant="body2">
-                        Do not have an account?
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography
-                        className={classes.link}
-                        color="secondary"
-                        onClick={handleSignUp}
-                        variant="body2"
-                      >
-                        Create
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                    Create
+                  </Typography>
                 </Grid>
               </Grid>
-            </Form>
-          )}
-          validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email()
-              .required(),
-          })}
-        />
+            </Grid>
+          </Grid>
+        </Form>
       )}
-    </Mutation>
+      validationSchema={yup.object().shape({
+        email: yup
+          .string()
+          .email()
+          .required(),
+      })}
+    />
   );
 }
 
