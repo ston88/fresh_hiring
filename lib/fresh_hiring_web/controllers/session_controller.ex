@@ -3,20 +3,52 @@ defmodule FreshHiringWeb.SessionController do
 
   alias FreshHiring.Accounts
 
+  def confirm(conn, %{"auth_token" => auth_token, "token" => confirmation_token}) do
+    with user when not is_nil(user) <- Accounts.get_user_by(%{confirmation_token: confirmation_token}),
+      {:ok, _updated_user} <- Accounts.confirm_user(user),
+      session when not is_nil(session) <- Accounts.get_session_by(%{
+        authenticated: false,
+        token: auth_token,
+        invalidated: false
+      }),
+      {:ok, updated_session} <- Accounts.update_session(session, %{authenticated: true}) do
+      # Push update to the subscription
+
+      # Confirmation successful
+      conn
+      |> Authentication.login(user)
+      |> put_resp_cookie(
+        "fresh_hiring_remember_session",
+        updated_session.token,
+        http_only: true,
+        max_age: 7_776_000
+      )
+      |> put_resp_cookie(
+        "fresh_hiring_remember_auth",
+        Phoenix.Token.sign(conn, "fresh_hiring", updated_session.auth_token),
+        http_only: true,
+        max_age: 7_776_000
+      )
+      |> put_status(302)
+      |> redirect(to: updated_session.redirect_to)
+    else
+      _ ->
+        conn
+        |> put_status(302)
+        |> redirect(to: "/?confirm=failure")
+    end
+  end
+
   def login(conn, %{"email" => email, "redirect_to" => redirect_to}) do
     with user when not is_nil(user) <- Accounts.get_user_by(%{email: email}),
-      {:ok, auth_token} <-
-        Accounts.create_auth_token(%{
-          redirect_to: redirect_to,
-          user_id: user.id
-        }) do
+      {:ok, session} <- Accounts.create_session(%{redirect_to: redirect_to, user_id: user.id}) do
       # Send verify Auth Token EMail
-      FreshHiring.Emails.auth_token_verify(auth_token, user)
+      FreshHiring.Emails.session_verify(session, user)
       # Return Session
       conn
       |> render("login.json", %{
         success: true,
-        auth_token: auth_token.token
+        session_token: session.token
       })
     else
       _ ->
@@ -34,37 +66,33 @@ defmodule FreshHiringWeb.SessionController do
   end
 
   def verify(conn, %{"token" => token}) do
-    with auth_token when not is_nil(auth_token) <-
-      Accounts.get_auth_by(%{
-        authenticated: false,
-        token: token,
-        invalidated: false
-      }),
-      {:ok, updated_auth_token} <- Accounts.update_auth_token(auth_token, %{authenticated: true}),
-      user when not is_nil(user) <- Accounts.get_user(updated_auth_token.user_id) do
+    with session when not is_nil(session) <-
+      Accounts.get_session_by(%{authenticated: false, token: token, invalidated: false}),
+      {:ok, updated_session} <- Accounts.update_session(session, %{authenticated: true}),
+      user when not is_nil(user) <- Accounts.get_user(updated_session.user_id) do
       # Updated Subscription
       Absinthe.Subscription.publish(
         FreshHiringWeb.Endpoint,
-        updated_auth_token,
-        auth_token_updated: updated_auth_token.token
+        updated_session,
+        session_updated: updated_session.token
       )
       # Return
       conn
       |> Authentication.login(user)
       |> put_resp_cookie(
         "fresh_hiring_remember_session",
-        updated_auth_token.token,
+        updated_session.token,
         http_only: true,
         max_age: 7_776_000
       )
       |> put_resp_cookie(
         "fresh_hiring_remember_auth",
-        Phoenix.Token.sign(conn, "fresh_hiring", updated_auth_token.auth_token),
+        Phoenix.Token.sign(conn, "fresh_hiring", updated_session.auth_token),
         http_only: true,
         max_age: 7_776_000
       )
       |> put_status(302)
-      |> redirect(to: updated_auth_token.redirect_to)
+      |> redirect(to: updated_session.redirect_to)
 
     else
       _ ->

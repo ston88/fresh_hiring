@@ -24,6 +24,8 @@ defmodule FreshHiringWeb.Router do
     post "/login", SessionController, :login
     get "/verify", SessionController, :verify
     post "/logout", SessionController, :logout
+
+    get("/confirm", SessionController, :confirm)
   end
 
   scope "/api/sent_emails" do

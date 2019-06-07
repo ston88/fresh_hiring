@@ -1,4 +1,4 @@
-defmodule FreshHiring.Accounts.AuthToken do
+defmodule FreshHiring.Accounts.Session do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -19,7 +19,7 @@ defmodule FreshHiring.Accounts.AuthToken do
     :user_id,
   ]
 
-  schema "accounts_auth_tokens" do
+  schema "accounts_sessions" do
     field(:authenticated, :boolean, default: false)
     field(:auth_token, Ecto.UUID, autogenerate: true)
     field :invalidated, :boolean, default: false

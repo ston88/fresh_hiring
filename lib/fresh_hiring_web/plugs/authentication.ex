@@ -37,16 +37,16 @@ defmodule FreshHiringWeb.Authentication do
     |> delete_resp_cookie("fresh_hiring_remember_auth")
   end
 
-  def refresh(conn, auth_token, user) do
-    case Accounts.update_auth_token(auth_token, %{auth_token: Ecto.UUID.generate()}) do
-      {:ok, updated_auth_token} ->
+  def refresh(conn, session, user) do
+    case Accounts.update_session(session, %{auth_token: Ecto.UUID.generate()}) do
+      {:ok, updated_session} ->
         conn
         |> configure_session(renew: true)
         |> put_session(:user_id, user.id)
         |> assign(:current_user, user)
         |> put_resp_cookie(
           "fresh_hiring_remember_auth",
-          Phoenix.Token.sign(conn, "fresh_hiring", updated_auth_token.auth_token),
+          Phoenix.Token.sign(conn, "fresh_hiring", updated_session.auth_token),
           http_only: true,
           max_age: 7_776_000
         )
@@ -62,10 +62,10 @@ defmodule FreshHiringWeb.Authentication do
   end
 
   def remember_me(conn) do
-    with session_token when not is_nil(auth_token) <- conn.cookies["fresh_hiring_remember_session"],
+    with session_token when not is_nil(session_token) <- conn.cookies["fresh_hiring_remember_session"],
       signed_auth_token when not is_nil(signed_auth_token) <- conn.cookies["fresh_hiring_remember_auth"],
       {:ok, auth_token} <- Phoenix.Token.verify(conn, "fresh_hiring", signed_auth_token, max_age: 7_776_000),
-      session when not is_nil(session) <- Accounts.get_auth_token_by(%{authenticated: true, auth_token: auth_token, token: session_token, invalidated: false}),
+      session when not is_nil(session) <- Accounts.get_session_by(%{authenticated: true, auth_token: auth_token, token: session_token, invalidated: false}),
       user when not is_nil(user) <- Accounts.get_user(session.user_id) do
       conn
       |> refresh(session, user)
