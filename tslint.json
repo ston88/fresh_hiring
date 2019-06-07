@@ -2,10 +2,12 @@
   "defaultSeverity": "error",
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
+    "no-empty": false,
     "no-submodule-imports": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "quotemark": [true, "single", "jsx-double"],
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "jsx-no-multiline-js": false
   }
 }

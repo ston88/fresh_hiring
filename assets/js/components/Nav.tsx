@@ -1,10 +1,6 @@
 import * as React from 'react';
 // MUI Core
-import { Theme } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
+import { AppBar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
 
@@ -35,10 +31,14 @@ function Nav() {
           <Grid item className={classes.menuContainer}>
             <Grid container justify="flex-end" spacing={2}>
               <Grid item>
-                <Button color="primary" variant="contained">Sign In</Button>
+                <Button color="primary" variant="contained">
+                  Sign In
+                </Button>
               </Grid>
               <Grid item>
-                <Button color="secondary" variant="contained">Create a Free Account</Button>
+                <Button color="secondary" variant="contained">
+                  Create a Free Account
+                </Button>
               </Grid>
             </Grid>
           </Grid>
