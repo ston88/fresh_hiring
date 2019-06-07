@@ -28,11 +28,7 @@ defmodule FreshHiringWeb.Router do
     get("/confirm", SessionController, :confirm)
   end
 
-  scope "/api/sent_emails" do
-    pipe_through(:api)
-
-    forward "/api/sent_emails", Bamboo.SentEmailViewerPlug
-  end
+  forward "/api/sent_emails", Bamboo.SentEmailViewerPlug
 
   scope "/api" do
     pipe_through(:api)
