@@ -3,6 +3,6 @@ defmodule FreshHiringWeb.EmailView do
   alias FreshHiringWeb.Router.Helpers, as: Routes
 
   def sign_in_url(page, token) do
-    Routes.session_url(FreshHiringWeb.Endpoint, page, token)
+    Routes.session_url(FreshHiringWeb.Endpoint, page, token: token)
   end
 end
