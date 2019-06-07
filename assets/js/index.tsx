@@ -12,6 +12,7 @@ import Root from './containers/Root';
 import theme from './utils/theme';
 
 ReactDOM.render(
+  // tslint:disable-next-line
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <Root />

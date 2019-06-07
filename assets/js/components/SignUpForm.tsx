@@ -34,7 +34,7 @@ function SignUpForm({ handleCancel, history }: IProps & RouteComponentProps) {
             email: '',
             name: '',
           }}
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={(values, { resetForm, setSubmitting }) => {
             const variables = {
               redirectTo: window.location.href,
               user: {
@@ -45,7 +45,8 @@ function SignUpForm({ handleCancel, history }: IProps & RouteComponentProps) {
 
             createUser({ variables })
               .then((result) => {
-                setSubmitting(false);
+                resetForm();
+
                 showSnackbar({
                   message: `An email has been sent to ${values.email}`,
                   variant: 'success',
