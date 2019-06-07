@@ -26,10 +26,9 @@ defmodule FreshHiringWeb.SessionController do
     end
   end
 
-  def delete(conn, _params) do
+  def logout(conn, _params) do
     conn
     |> Authentication.logout()
-    |> put_flash(:info, "You logged out successfully.")
     |> redirect(to: "/")
   end
 
