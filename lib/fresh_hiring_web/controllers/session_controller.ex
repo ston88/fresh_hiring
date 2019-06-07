@@ -29,7 +29,7 @@ defmodule FreshHiringWeb.SessionController do
   def logout(conn, _params) do
     conn
     |> Authentication.logout()
-    |> redirect(to: "/")
+    |> render("logout.json", %{ success: true })
   end
 
   def verify(conn, %{"token" => token}) do

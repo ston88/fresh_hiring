@@ -8,6 +8,12 @@ defmodule FreshHiringWeb.SessionView do
     }
   end
 
+  def render("logout.json", %{ success: success}) do
+    %{
+      success: success
+    }
+  end
+
   def render("error.json", %{error: error}) do
     %{
       error: error
