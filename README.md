@@ -17,6 +17,12 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Welcome / Login emails can be access at the following address http://localhost:4000/api/sent_emails
 
+# File Structure
+
+React App code can be located in the assets folder, the package.json file can be found at root.
+
+The Phoenix app can be found in Lib
+
 ## Tasks
 
 ### Implement Bidding for Capital Raises

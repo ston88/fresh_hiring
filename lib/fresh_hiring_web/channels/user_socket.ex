@@ -1,6 +1,11 @@
 defmodule FreshHiringWeb.UserSocket do
   use Phoenix.Socket
 
+  use Absinthe.Phoenix.Socket,
+    schema: FreshWeb.Schema
+
+  alias Fresh.Accounts
+
   ## Channels
   # channel "room:*", FreshHiringWeb.RoomChannel
 
@@ -15,8 +20,25 @@ defmodule FreshHiringWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(%{"token" => token}, socket) do
+    case Phoenix.Token.verify(
+           FreshWeb.Endpoint,
+           "fresh_hiring",
+           token,
+           max_age: 86_400
+         ) do
+      {:ok, user_id} ->
+        socket =
+          Absinthe.Phoenix.Socket.put_options(
+            socket,
+            context: %{current_user: Accounts.get_user(user_id)}
+          )
+
+        {:ok, socket}
+
+      {:error, _error} ->
+        {:ok, socket}
+    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

@@ -38,12 +38,6 @@ defmodule FreshHiringWeb.SessionController do
       Accounts.get_session_by(%{authenticated: false, token: token, invalidated: false}),
       {:ok, updated_session} <- Accounts.update_session(session, %{authenticated: true}),
       user when not is_nil(user) <- Accounts.get_user(updated_session.user_id) do
-      # Updated Subscription
-      Absinthe.Subscription.publish(
-        FreshHiringWeb.Endpoint,
-        updated_session,
-        session_updated: updated_session.token
-      )
       # Return
       conn
       |> Authentication.login(user)
