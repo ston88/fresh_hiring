@@ -12,7 +12,7 @@
 
 capital_raises =[%{
   allocation_available: true,
-  banner: "/images/dealpad-banner.png",
+  banner: "/images/dealpad-banner.jpg",
   bids_due: ~N[2019-12-12 17:00:00],
   bidding_open: ~N[2019-06-07 00:00:00],
   bidding_close: ~N[2019-12-31 17:00:00],

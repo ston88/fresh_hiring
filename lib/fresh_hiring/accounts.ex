@@ -76,7 +76,7 @@ defmodule FreshHiring.Accounts do
     |> case do
       {:ok, %{user: user, session: session}} ->
         # Send welcome email to new user
-        Emails.welcome_email(user.email, user.name, session.token) |> Mailer.deliver_now
+        Emails.welcome_email(session, user) |> Mailer.deliver_now
         # Return User
         {:ok, user}
 

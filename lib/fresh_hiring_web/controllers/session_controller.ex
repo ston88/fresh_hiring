@@ -2,14 +2,15 @@ defmodule FreshHiringWeb.SessionController do
   use FreshHiringWeb, :controller
 
   alias FreshHiring.Accounts
+  alias FreshHiring.Emails
 
   alias FreshHiringWeb.Authentication
 
   def login(conn, %{"email" => email, "redirect_to" => redirect_to}) do
     with user when not is_nil(user) <- Accounts.get_user_by(%{email: email}),
       {:ok, session} <- Accounts.create_session(%{redirect_to: redirect_to, user_id: user.id}) do
-      # Send verify Auth Token EMail
-      FreshHiring.Emails.session_verify(session, user)
+      # Send verify Auth Token Email
+      Emails.session_verify(session, user) |> Mailer.deliver_now
       # Return Session
       conn
       |> render("login.json", %{
