@@ -14,12 +14,6 @@ defmodule FreshHiringWeb.Schema do
   end
 
   mutation do
-    field :create_auth_token, :string do
-      arg :email, non_null(:string)
-      arg :redirect_to, :string
-      resolve &Resolvers.Accounts.create_auth_token/3
-    end
-
     field :create_user, :user do
       arg :user, non_null(:user_input)
       arg :redirect_to, :string

@@ -7,11 +7,10 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :fresh_hiring, FreshHiringWeb.Endpoint,
-  https: [port: 4000, keyfile: "priv/server.key", certfile: "priv/server.pem"],
+  http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  force_ssl: [hsts: true, rewrite_on: [:x_forwarded_proto], subdomains: true],
   watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",

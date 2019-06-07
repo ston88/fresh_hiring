@@ -3,41 +3,7 @@ defmodule FreshHiringWeb.SessionController do
 
   alias FreshHiring.Accounts
 
-  def confirm(conn, %{"auth_token" => auth_token, "token" => confirmation_token}) do
-    with user when not is_nil(user) <- Accounts.get_user_by(%{confirmation_token: confirmation_token}),
-      {:ok, _updated_user} <- Accounts.confirm_user(user),
-      session when not is_nil(session) <- Accounts.get_session_by(%{
-        authenticated: false,
-        token: auth_token,
-        invalidated: false
-      }),
-      {:ok, updated_session} <- Accounts.update_session(session, %{authenticated: true}) do
-      # Push update to the subscription
-
-      # Confirmation successful
-      conn
-      |> Authentication.login(user)
-      |> put_resp_cookie(
-        "fresh_hiring_remember_session",
-        updated_session.token,
-        http_only: true,
-        max_age: 7_776_000
-      )
-      |> put_resp_cookie(
-        "fresh_hiring_remember_auth",
-        Phoenix.Token.sign(conn, "fresh_hiring", updated_session.auth_token),
-        http_only: true,
-        max_age: 7_776_000
-      )
-      |> put_status(302)
-      |> redirect(to: updated_session.redirect_to)
-    else
-      _ ->
-        conn
-        |> put_status(302)
-        |> redirect(to: "/?confirm=failure")
-    end
-  end
+  alias FreshHiringWeb.Authentication
 
   def login(conn, %{"email" => email, "redirect_to" => redirect_to}) do
     with user when not is_nil(user) <- Accounts.get_user_by(%{email: email}),
