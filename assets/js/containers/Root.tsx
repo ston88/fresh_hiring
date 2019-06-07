@@ -27,11 +27,11 @@ function Root() {
             {/* Route for home page. */}
             <Route exact path="/" component={Home} />
 
+            {/* Route for organisation page. */}
+            <Route exact path="/capital-raise/:capitalRaiseId" component={Organisation} />
+
             {/* Route for welcome page. */}
             <Route exact path="/welcome/:token" component={Welcome} />
-
-            {/* Route for organisation page. */}
-            <Route exact path="/:marketKey/:listingKey" component={Organisation} />
 
             {/* Route for 404. */}
             <Route />

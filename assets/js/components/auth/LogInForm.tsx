@@ -34,7 +34,7 @@ function LogInForm({ handleSignUp, history }: IProps & RouteComponentProps) {
       onSubmit={(values, { resetForm, setSubmitting }) => {
         const input = {
           email: values.email,
-          redirect_to: window.location.href,
+          redirect_to: window.location.pathname,
         };
 
         fetch('/api/auth/login', {
@@ -59,7 +59,7 @@ function LogInForm({ handleSignUp, history }: IProps & RouteComponentProps) {
             resetForm();
 
             showSnackbar({
-              message: `An email has been sent to ${values.email}`,
+              message: `An email has been sent to ${values.email}.`,
               variant: 'success',
             });
 

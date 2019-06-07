@@ -1,11 +1,16 @@
 import * as React from 'react';
+import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 // MUI Core
-import { AppBar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
+import { AppBar, Avatar, Button, Grid, Toolbar, Theme } from '@material-ui/core';
 // MUI Styles
 import { makeStyles } from '@material-ui/styles';
+// Components
+import UserMenu from './UserMenu';
 // Contexts
 import AuthDialogContext from '../../contexts/AuthDialogContext';
+// GraphQL
+import MeQuery, { IMeQueryData } from '../../graphql/queries/MeQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -38,13 +43,28 @@ function Nav() {
           <Grid item className={classes.menuContainer}>
             <Grid container justify="flex-end" spacing={2}>
               <Grid item>
-                <Button
-                  color="secondary"
-                  onClick={showAuthDialog}
-                  variant="contained"
+                <Query<IMeQueryData, {}>
+                  fetchPolicy="cache-and-network"
+                  query={MeQuery}
                 >
-                  Sign In
-                </Button>
+                  {({ data }) => {
+                    if (data && data.me) {
+                      return (
+                        <UserMenu me={data.me} />
+                      );
+                    }
+
+                    return (
+                      <Button
+                        color="secondary"
+                        onClick={showAuthDialog}
+                        variant="contained"
+                      >
+                        Sign In
+                      </Button>
+                    );
+                  }}
+                </Query>
               </Grid>
             </Grid>
           </Grid>
