@@ -98,6 +98,8 @@ defmodule FreshHiring.Organisations do
 
   defp capital_raises_filter_with(filters, query) do
     Enum.reduce(filters, query, fn
+      %{key: "search", value: "%%"}, query ->
+        query
       %{key: "search", value: value}, query ->
         from(q in query, where: ilike(q.key, ^value) or ilike(q.name, ^value))
     end)
