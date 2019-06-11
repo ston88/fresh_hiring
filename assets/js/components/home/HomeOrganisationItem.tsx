@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 // MUI Core
-import { Box, Theme, Typography } from '@material-ui/core';
+import { Theme, Typography } from '@material-ui/core';
 // MUI Styles
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
+// Types
+import { ICapitalRaise } from '../../utils/types';
+
+interface IProps {
+  capitalRaise: ICapitalRaise;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   banner: {
@@ -49,22 +54,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function HomeOrganisationItem() {
+function HomeOrganisationItem({ capitalRaise }: IProps) {
   const classes = useStyles();
-  const theme = useTheme<Theme>();
 
   return (
     <a
       className={classes.link}
-      href="/ASX/WSR"
+      href={`/capital-raise/${capitalRaise.id}`}
       rel="noopener noreferrer"
       target="_blank"
     >
       <div className={classes.bannerWrapper}>
         <img
           className={classes.banner}
-          alt="ASX:DPD"
-          src="/images/dealpad-banner.jpg"
+          alt={capitalRaise.key}
+          src={capitalRaise.banner}
         />
       </div>
 
@@ -72,17 +76,17 @@ function HomeOrganisationItem() {
         <div className={classes.logoWrapper}>
           <img
             className={classes.logo}
-            alt="ASX:DPD"
-            src="/images/dealpad-logo.png"
+            alt={capitalRaise.key}
+            src={capitalRaise.logo}
           />
         </div>
         <div className={classes.infoContainer}>
           <Typography color="secondary" noWrap variant="caption">
             CAPITAL RAISE
           </Typography>
-          <Typography noWrap>DEAL PAD PTY LTD</Typography>
+          <Typography noWrap>{capitalRaise.name}</Typography>
           <Typography color="textSecondary" variant="caption">
-            ASX:DPD
+            {capitalRaise.key}
           </Typography>
         </div>
       </div>

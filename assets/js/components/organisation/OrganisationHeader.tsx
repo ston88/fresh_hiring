@@ -3,37 +3,11 @@ import * as React from 'react';
 import { Box, Container, Grid, Theme, Typography } from '@material-ui/core';
 // MUI Styles
 import { makeStyles, useTheme } from '@material-ui/styles';
+// Types
+import { ICapitalRaise } from '../../utils/types';
 
 interface IProps {
-  capitalRaise: {
-    id: string;
-    insertedAt: string;
-    updatedAt: string;
-
-    allocationAvailable: string;
-    banner: string;
-    bidsDue: string;
-    biddingOpen: string;
-    biddingClose: string;
-    gics: string;
-    haltPrice: number;
-    instrument: string;
-    key: string;
-    logo: string;
-    marketCap: number;
-    maxAmount: number;
-    minAmount: number;
-    name: string;
-    optionsAvailable: boolean;
-    optionsExpiration: number;
-    optionsRatioNumerator: number;
-    optionsRatioDenominator: number;
-    optionsStrikePrice: number;
-    price: number;
-    summary: string;
-    type: string;
-    website: string;
-  };
+  capitalRaise: ICapitalRaise;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({

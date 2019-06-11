@@ -1,35 +1,9 @@
 import { gql } from 'apollo-boost';
+// Types
+import { ICapitalRaise } from '../../utils/types';
 
 export interface ICapitalRaiseQueryData {
-  capitalRaise: {
-    id: string;
-    insertedAt: string;
-    updatedAt: string;
-
-    allocationAvailable: string;
-    banner: string;
-    bidsDue: string;
-    biddingOpen: string;
-    biddingClose: string;
-    gics: string;
-    haltPrice: number;
-    instrument: string;
-    key: string;
-    logo: string;
-    marketCap: number;
-    maxAmount: number;
-    minAmount: number;
-    name: string;
-    optionsAvailable: boolean;
-    optionsExpiration: number;
-    optionsRatioNumerator: number;
-    optionsRatioDenominator: number;
-    optionsStrikePrice: number;
-    price: number;
-    summary: string;
-    type: string;
-    website: string;
-  };
+  capitalRaise: ICapitalRaise;
 }
 
 export interface ICapitalRaiseQueryVariables {

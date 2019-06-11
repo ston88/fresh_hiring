@@ -38,7 +38,7 @@ function Organisation({
                     <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                       <Grid container spacing={3}>
                         <Grid item xs={12}>
-                          <OrganisationLiveCapitalRaise />
+                          <OrganisationLiveCapitalRaise capitalRaise={capitalRaise} />
                         </Grid>
                         <Grid item xs={12}>
                           <OrganisationInformation />

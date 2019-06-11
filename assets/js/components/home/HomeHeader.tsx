@@ -12,6 +12,10 @@ import {
 // MUI Styles
 import { makeStyles, useTheme } from '@material-ui/styles';
 
+interface IProps {
+  applySearch: (value: string) => void;
+}
+
 const useStyles = makeStyles({
   iconContainer: {
     display: 'flex',
@@ -24,9 +28,15 @@ const useStyles = makeStyles({
   },
 });
 
-function HomeHeader() {
+function HomeHeader({ applySearch }: IProps) {
   const classes = useStyles();
   const theme = useTheme<Theme>();
+
+  const [search, setSearch] = React.useState('');
+
+  React.useEffect(() => {
+    applySearch(search);
+  }, [search]);
 
   return (
     <Box bgcolor={theme.palette.common.white}>
@@ -52,11 +62,15 @@ function HomeHeader() {
                         classes: { input: classes.input },
                         disableUnderline: true,
                       }}
+                      onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search by Company Name, Code, Industry, or Tag"
+                      value={search}
                     />
                   </Grid>
                   <Grid item className={classes.iconContainer}>
-                    <Icon color="action" fontSize="small">search</Icon>
+                    <Icon color="action" fontSize="small">
+                      search
+                    </Icon>
                   </Grid>
                 </Grid>
               </Box>

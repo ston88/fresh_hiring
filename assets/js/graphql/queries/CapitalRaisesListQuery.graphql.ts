@@ -1,54 +1,29 @@
 import { gql } from 'apollo-boost';
+// Types
+import { ICapitalRaise } from '../../utils/types';
 
 export interface ICapitalRaisesListQueryData {
-  edges: Array<{
-    node: {
-      id: string;
-      insertedAt: string;
-      updatedAt: string;
-
-      allocationAvailable: string;
-      banner: string;
-      bidsDue: string;
-      biddingOpen: string;
-      biddingClose: string;
-      gics: string;
-      haltPrice: number;
-      instrument: string;
-      key: string;
-      logo: string;
-      marketCap: number;
-      maxAmount: number;
-      minAmount: number;
-      name: string;
-      optionsAvailable: boolean;
-      optionsExpiration: number;
-      optionsRatioNumerator: number;
-      optionsRatioDenominator: number;
-      optionsStrikePrice: number;
-      price: number;
-      summary: string;
-      type: string;
-      website: string;
+  capitalRaisesList: {
+    edges: Array<{
+      node: ICapitalRaise;
+    }>;
+    pageInfo: {
+      endCursor: string;
+      hasNextPage: boolean;
+      startCursor: string;
+      hasPreviousPage: boolean;
     };
-  }>;
-  pageInfo: {
-    endCursor: string;
-    hasNextPage: boolean;
-    startCursor: string;
-    hasPreviousPage: boolean;
+    options: {
+      filters: Array<{
+        key: string;
+        value: string;
+      }>;
+      orders: Array<{
+        key: string;
+        value: string;
+      }>;
+    };
   };
-  options: {
-    filters: Array<{
-      key: string;
-      value: string;
-    }>;
-    orders: Array<{
-      key: string;
-      value: string;
-    }>;
-  };
-  total: number;
 }
 
 export interface ICapitalRaisesListQueryVariables {
@@ -57,11 +32,11 @@ export interface ICapitalRaisesListQueryVariables {
   last?: number;
   before?: string;
   options?: {
-    filters: Array<{
+    filters?: Array<{
       key: string;
       value: string;
     }>;
-    orders: Array<{
+    orders?: Array<{
       key: string;
       value: string;
     }>;
@@ -118,7 +93,6 @@ export default gql`
           value
         }
       }
-      total(options: $options)
     }
   }
 `;
