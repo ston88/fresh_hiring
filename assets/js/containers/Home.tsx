@@ -23,6 +23,12 @@ function Home() {
     loading: boolean;
   }) {
     if (data && data.capitalRaisesList) {
+      if (data.capitalRaisesList.edges.length === 0) {
+        return (
+          <Typography variant="body2">Sorry, we could not find the capital raise you are looking for.</Typography>
+        );
+      }
+
       return (
         <Grid container spacing={2}>
           {data.capitalRaisesList.edges.map(({ node }) => (
