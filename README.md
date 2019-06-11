@@ -48,3 +48,15 @@ Surprise me, implement a feature you think would be relevant to support a user b
 ## Questions?
 
 Ask me anything at rhys@freshequities.com
+
+## Readings
+
+Some useful documentations you can read:
+
+* [React](https://reactjs.org/docs/getting-started.html)
+* [Material UI](https://material-ui.com/)
+* [React Apollo](https://www.apollographql.com/docs/react/)
+* [React Router](https://reacttraining.com/react-router/web/guides/quick-start)
+* [Phoenix Framework](https://hexdocs.pm/phoenix/Phoenix.html)
+* [Formik](https://jaredpalmer.com/formik/docs/overview)
+* [Yup](https://github.com/jquense/yup)
