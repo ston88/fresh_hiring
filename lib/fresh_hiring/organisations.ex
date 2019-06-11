@@ -77,7 +77,7 @@ defmodule FreshHiring.Organisations do
     end)
   end
 
-  defp capital_raises_order_with(orders, query) do
+  defp capital_raises_order_with(query, orders) do
     Enum.reduce(orders, query, fn
       %{key: "bidding_close", value: "true"}, query ->
         from(q in query, order_by: [desc: :bidding_close])
@@ -96,7 +96,7 @@ defmodule FreshHiring.Organisations do
     end)
   end
 
-  defp capital_raises_filter_with(filters, query) do
+  defp capital_raises_filter_with(query, filters) do
     Enum.reduce(filters, query, fn
       %{key: "search", value: "%%"}, query ->
         query
