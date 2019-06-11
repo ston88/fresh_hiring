@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ApolloError } from 'apollo-boost';
 import { Query } from 'react-apollo';
 // MUI Core
 import { Box, Container, Grid, Typography } from '@material-ui/core';
@@ -12,13 +13,45 @@ import CapitalRaisesListQuery, {
 } from '../graphql/queries/CapitalRaisesListQuery.graphql';
 
 function Home() {
+  function renderContent({
+    data,
+    error,
+    loading,
+  }: {
+    data?: ICapitalRaisesListQueryData;
+    error?: ApolloError;
+    loading: boolean;
+  }) {
+    if (data && data.capitalRaisesList) {
+      return (
+        <Grid container spacing={2}>
+          {data.capitalRaisesList.edges.map(({ node }) => (
+            <Grid key={node.id} item xs={12} sm={6} md={4} lg={3}>
+              <HomeOrganisationItem capitalRaise={node} />
+            </Grid>
+          ))}
+        </Grid>
+      );
+    }
+
+    if (error) {
+      return (
+        <Typography variant="body2">Oops! Something went wrong.</Typography>
+      );
+    }
+
+    if (loading) {
+      return null;
+    }
+  }
+
   return (
     <Query<ICapitalRaisesListQueryData, ICapitalRaisesListQueryVariables>
       fetchPolicy="cache-and-network"
       query={CapitalRaisesListQuery}
       variables={{ first: 10 }}
     >
-      {({ data, refetch }) => (
+      {({ data, error, loading, refetch }) => (
         <React.Fragment>
           <HomeHeader
             applySearch={(value: string) =>
@@ -36,17 +69,9 @@ function Home() {
                     These raises were most recently launched on the ASX.
                   </Typography>
                 </Grid>
-                {data && data.capitalRaisesList && (
-                  <Grid item xs={12}>
-                    <Grid container spacing={2}>
-                      {data.capitalRaisesList.edges.map(({ node }) => (
-                        <Grid key={node.id} item xs={12} sm={6} md={4} lg={3}>
-                          <HomeOrganisationItem capitalRaise={node} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Grid>
-                )}
+                <Grid item xs={12}>
+                  {renderContent({ data, error, loading })}
+                </Grid>
               </Grid>
             </Box>
           </Container>
