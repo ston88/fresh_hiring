@@ -45,10 +45,6 @@ The requirements for bidding are as follows;
 
 Surprise me, implement a feature you think would be relevant to support a user bidding.
 
-## Questions?
-
-Ask me anything at rhys@freshequities.com
-
 ## Readings
 
 Some useful documentations you can read:
@@ -60,3 +56,7 @@ Some useful documentations you can read:
 * [Phoenix Framework](https://hexdocs.pm/phoenix/Phoenix.html)
 * [Formik](https://jaredpalmer.com/formik/docs/overview)
 * [Yup](https://github.com/jquense/yup)
+
+## Questions?
+
+Ask me anything at rhys@freshequities.com
