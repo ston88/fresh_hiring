@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Form, Formik } from 'formik';
 import { Mutation } from 'react-apollo';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 // MUI Core
 import { Typography, Dialog, Grid, TextField, Button, DialogTitle } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 // Types
 import { ICapitalRaise } from '../../utils/types';
 import { isInteger } from 'formik';
@@ -17,7 +19,12 @@ import PlaceBidMutation, {
 import SnackbarContext from '../../contexts/SnackbarContext';
 // Utils
 import { getErrorMessage } from '../../utils/helper';
-import { orange } from '@material-ui/core/colors';
+
+const useStyles = makeStyles({
+  warning: {
+    color: 'orange'
+  },
+});
 
 interface IProps {
   capitalRaise: ICapitalRaise;
@@ -32,12 +39,12 @@ export interface ConfirmDialogProps {
   bidAmount: number;
 }
 
-function ConfirmDialog2(props: ConfirmDialogProps) {
+function ConfirmDialog(props: ConfirmDialogProps) {
   const { onClose, user, organisation, bidAmount, ...other } = props;
   const { showSnackbar } = React.useContext(SnackbarContext);
 
-  const shares:number = bidAmount / organisation.price;
-  const option:number = shares * organisation.optionsRatioNumerator / organisation.optionsRatioDenominator;
+  const shares:number = Math.floor(bidAmount / organisation.price);
+  const option:number = Math.floor(shares * organisation.optionsRatioNumerator / organisation.optionsRatioDenominator);
 
   return(
     <Mutation<IPlaceBidMutationData, IPlaceBidMutationVariables>
@@ -72,9 +79,15 @@ function ConfirmDialog2(props: ConfirmDialogProps) {
                 resetForm();
 
                 showSnackbar({
-                  message: `Bid successful - Receiving ${shares} shares and ${option} options.`,
+                  message: `Bid successful! Bid Summary -> Amount paid $${bidAmount}, receiving ${shares} shares and ${option} options.`,
                   variant: 'success',
                 });
+
+                onClose();
+
+                if (result && result.data && result.data.placeBid) {
+                  // history.push(`/bidsummary/${result.data.placeBid.id}`);
+                }
               })
               .catch((error) => {
                 setSubmitting(false);
@@ -97,14 +110,16 @@ function ConfirmDialog2(props: ConfirmDialogProps) {
                 <Grid container justify="center" spacing={3}>
                   <Grid item xs={12}>
                     <Grid container justify="center" spacing={2}>
-                      <Grid item xs={12}>
-                        <Typography align="center">
+                      <Grid item xs={4} />
+                      <Grid item xs={4}>
+                        <Typography align="justify">
                           Proceed with the bid?<br />
-                          Amount paid: {bidAmount}<br />
-                          Shares to receive: {shares}<br />
-                          Option to receive: {option}<br />
+                          Amount paid: <b>${bidAmount}</b><br />
+                          Shares received: <b>{shares}</b><br />
+                          Option received: <b>{option}</b><br />
                         </Typography>
                       </Grid>
+                      <Grid item xs={4} />
                     </Grid>
                   </Grid>
                   <Grid item xs={12}>
@@ -142,35 +157,6 @@ function ConfirmDialog2(props: ConfirmDialogProps) {
   );
 }
 
-function ConfirmDialog(props: ConfirmDialogProps) {
-  const { onClose, ...other } = props;
-
-  return (
-    <Dialog maxWidth="sm" fullWidth={true} onClose={onClose} aria-labelledby="simple-dialog-title" {...other} >
-      <DialogTitle id="dialog">Confirm Bid</DialogTitle>
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <Typography align="center">
-            Proceed with the bid?
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography align="center">
-            <Button variant="contained" color="primary" onClick={onClose}>
-              Confirm
-            </Button>
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography align="center">            
-          </Typography>
-        </Grid>
-      </Grid>
-    </Dialog>
-  );
-
-}
-
 function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
   const printSharesReceived = (value:number) => {
     return value.toString() + " shares received.";
@@ -185,7 +171,10 @@ function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
   const [sharesReceived, setSharesReceived] = React.useState(printSharesReceived(0));
   const [optionsReceived, setOptionsReceived] = React.useState(printOptionsReceived(0));
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [warningMessage, setWarningMessage] = React.useState("");
   const [btnDisabled, setBtnDisabled] = React.useState(true);
+
+  const styles = useStyles();
 
   const handleOpen = () => {
     setOpen(true);
@@ -200,15 +189,17 @@ function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
     
     setBtnDisabled(true); // Enable the place bid button
     setErrorMessage("");
+    setWarningMessage("");
     var value:number = parseFloat(input);
     setAmount(value);
 
-    if (input.trim() === "")
+    if (input.trim() === "" || value == 0)
     {
       setSharesReceived(printSharesReceived(0));
       setOptionsReceived(printOptionsReceived(0));
     }
     else if (!isNaN(value)) {
+      var message:string = "";
       var numOfShares:number = value / capitalRaise.price;
       var numOfOptions:number = numOfShares * capitalRaise.optionsRatioNumerator / capitalRaise.optionsRatioDenominator;        
 
@@ -216,15 +207,25 @@ function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
       setOptionsReceived(printOptionsReceived(numOfOptions));
 
       if (!Number.isInteger(numOfShares)) {
-        var suggestedAmount:number = Math.floor(numOfShares) * capitalRaise.price;
-        if (suggestedAmount === 0)
-          suggestedAmount = 1 * capitalRaise.price;
-        const message = "Cannot bid fractional shares. Do you wanna bid " + suggestedAmount + " instead?";
-        setErrorMessage(message);
+        const shares = Math.floor(numOfShares);
+        const suggestedAmount:number = shares * capitalRaise.price;
+
+        if (suggestedAmount === 0) {
+          setErrorMessage("Bid invalid, number of shares received is 0!");
+        }
+        else {
+          setWarningMessage(`
+            Cannot bid fractional shares.
+            The amount of bid will automatically be round down to $${suggestedAmount}
+            and you will receive ${shares} shares.`);
+          setBtnDisabled(false);  
+        }
+
+        setAmount(suggestedAmount);
       }
       else {
         setBtnDisabled(false);
-      }  
+      } 
     }
     else {
       const errorMessage = "invalid amount!";
@@ -237,7 +238,7 @@ function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
     <Grid container spacing={3}>
       <Grid item xs={6}>
         <Typography variant="body1" align="right">
-          Hi {meData.me.id} - {capitalRaise.id} Please put the amount of bid:
+          Please put the amount of bid:
         </Typography>
       </Grid>
       <Grid item xs={6}>
@@ -259,13 +260,20 @@ function OrganisationBiddingForm({ capitalRaise, meData }: IProps) {
         </Typography>
       </Grid>
       <Grid item xs={12}>
+        <Typography 
+          classes={{ root: styles.warning }} 
+          align="center"
+        >
+          {warningMessage}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
         <Typography align="center">
           <Button variant="contained" color="primary" onClick={handleOpen} disabled={btnDisabled}>
             Place Bid
           </Button>
         </Typography>
-        {/* <ConfirmDialog open={openDialog} onClose={handleClose} /> */}
-        <ConfirmDialog2 open={openDialog} onClose={handleClose} organisation={capitalRaise} user={meData} bidAmount={amount} />
+        <ConfirmDialog open={openDialog} onClose={handleClose} organisation={capitalRaise} user={meData} bidAmount={amount} />
       </Grid>
     </Grid>
   );

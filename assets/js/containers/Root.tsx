@@ -9,6 +9,7 @@ import Nav from '../components/common/Nav';
 import Home from './Home';
 import Organisation from './Organisation';
 import Welcome from './Welcome';
+import BidSummary from './BidSummary';
 // Contexts
 import ContextProvider from '../contexts/ContextProvider';
 // Utils
@@ -32,6 +33,9 @@ function Root() {
 
             {/* Route for welcome page. */}
             <Route exact path="/welcome/:token" component={Welcome} />
+
+            {/* Route for bidding summary page. */}
+            <Route exact path="/bidsummary/:bidId" component={BidSummary} />
 
             {/* Route for 404. */}
             <Route />

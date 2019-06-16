@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 
-export interface ICapitalRaiseQueryData {
+export interface IGetBidQueryData {
   getBid: {
     id: string;
     amount_paid: number;
@@ -13,7 +13,7 @@ export interface ICapitalRaiseQueryData {
   }
 }
 
-export interface ICapitalRaiseQueryVariables {
+export interface IGetBidQueryVariables {
   id: string;
 }
 
