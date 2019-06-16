@@ -2,6 +2,8 @@ defmodule FreshHiring.Organisations.CapitalRaise do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias FreshHiring.Organisations.Bidding
+
   @raise_fields [
     :banner,
     :bids_due,
@@ -59,6 +61,8 @@ defmodule FreshHiring.Organisations.CapitalRaise do
     field :summary, :string
     field :type, :string
     field :website, :string
+
+    has_many :biddings, Bidding
 
     timestamps()
   end

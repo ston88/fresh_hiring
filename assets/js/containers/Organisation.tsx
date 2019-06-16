@@ -41,15 +41,13 @@ function Organisation({
                           <OrganisationLiveCapitalRaise capitalRaise={capitalRaise} />
                         </Grid>
                         <Grid item xs={12}>
+                          <OrganisationStickyBidCard capitalRaise={capitalRaise} />
+                        </Grid>
+                        <Grid item xs={12}>
                           <OrganisationInformation />
                         </Grid>
                       </Grid>
                     </Grid>
-                    <Hidden smDown>
-                      <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-                        <OrganisationStickyBidCard />
-                      </Grid>
-                    </Hidden>
                   </Grid>
                 </Box>
               </Container>

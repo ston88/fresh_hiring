@@ -121,4 +121,32 @@ defmodule FreshHiringWeb.Schema.Types do
   defp decode(%Absinthe.Blueprint.Input.String{value: value}) do
     Timex.parse(value, "{ISO:Extended:Z}")
   end
+
+  #########################################################################
+  # Bid Types                                                             #
+  #########################################################################
+  input_object :bid_input do
+    field :amount_paid, :float
+    field :shares_price, :float
+    field :options_ratio_numerator, :integer
+    field :options_ratio_denominator, :integer
+    field :options_strike_price, :float
+    field :user_id, :id
+    field :organisation_id, :id
+  end
+
+  object :bid do
+    field(:id, :id)
+    field(:inserted_at, :time)
+    field(:updated_at, :time)
+    # Default Fields
+    field :amount_paid, :float
+    field :shares_price, :float
+    field :options_ratio_numerator, :integer
+    field :options_ratio_denominator, :integer
+    field :options_strike_price, :float
+    field :user_id, :id
+    field :organisation_id, :id
+  end
+
 end

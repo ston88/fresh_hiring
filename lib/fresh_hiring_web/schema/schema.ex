@@ -21,6 +21,11 @@ defmodule FreshHiringWeb.Schema do
     field :me, :user do
       resolve &Resolvers.Accounts.find_user/3
     end
+
+    field :get_bid, :bid do
+      arg :id, non_null(:id)
+      resolve &Resolvers.Organisations.get_bid/3
+    end
   end
 
   mutation do
@@ -34,6 +39,11 @@ defmodule FreshHiringWeb.Schema do
       arg :user_id, non_null(:id)
       arg :user, non_null(:user_input)
       resolve &Resolvers.Accounts.update_user/3
+    end
+
+    field :place_bid, :bid do
+      arg :bid, non_null(:bid_input)
+      resolve &Resolvers.Organisations.place_bid/3
     end
   end
 end

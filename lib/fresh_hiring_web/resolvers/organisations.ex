@@ -33,4 +33,24 @@ defmodule FreshHiringWeb.Resolvers.Organisations do
         {:ok, capital_raise}
     end
   end
+
+  def place_bid(_parents, %{bid: bid}, _context) do
+    case Organisations.insert_bidding(bid) do
+      {:ok, bid} ->
+        {:ok, bid}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  def get_bid(_parents, %{id: id}, _context) do
+    case Organisations.get_bidding(id) do
+      nil ->
+        {:ok, nil}
+
+      bid ->
+        {:ok, bid}
+    end
+  end
 end

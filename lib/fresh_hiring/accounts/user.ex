@@ -3,6 +3,7 @@ defmodule FreshHiring.Accounts.User do
   import Ecto.Changeset
 
   alias FreshHiring.Accounts.Session
+  alias FreshHiring.Organisations.Bidding
 
   @user_fields [:email, :invalidated, :name]
 
@@ -14,6 +15,7 @@ defmodule FreshHiring.Accounts.User do
     field :name, :string
 
     has_many :sessions, Session
+    has_many :biddings, Bidding
 
     timestamps()
   end

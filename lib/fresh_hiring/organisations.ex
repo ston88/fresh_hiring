@@ -7,6 +7,7 @@ defmodule FreshHiring.Organisations do
   alias FreshHiring.Repo
 
   alias FreshHiring.Organisations.CapitalRaise
+  alias FreshHiring.Organisations.Bidding
 
   ## General Functions ##
   def run_query(query) do
@@ -77,7 +78,7 @@ defmodule FreshHiring.Organisations do
     end)
   end
 
-  defp capital_raises_order_with(query, orders) do
+  def capital_raises_order_with(query, orders) do
     Enum.reduce(orders, query, fn
       %{key: "bidding_close", value: "true"}, query ->
         from(q in query, order_by: [desc: :bidding_close])
@@ -151,4 +152,25 @@ defmodule FreshHiring.Organisations do
   def change_capital_raise(%CapitalRaise{} = capital_raise) do
     CapitalRaise.changeset(capital_raise, %{})
   end
+
+  @doc """
+  
+  Biddings
+
+  """
+  def insert_bidding(attrs \\ %{}) do
+    %Bidding{}
+    |> Bidding.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def list_biddings do
+    Repo.all(Bidding)
+  end
+
+  def get_bidding!(id), do: Repo.get!(Bidding, id)
+
+  def get_bidding(id), do: Repo.get(Bidding, id)
+
+  def get_bidding_by(attrs), do: Repo.get_by(Bidding, attrs)
 end
